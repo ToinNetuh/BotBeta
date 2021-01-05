@@ -491,6 +491,22 @@ module.exports = HandleMsg = async (aruga, message) => {
                     } else {
                         aruga.reply(from, `Selecione on/off \n\n*[Anti Link de Grupo]*\nCada membro do grupo que postar uma mensagem contendo o link do grupo será expulso pelo Toin que faz figurar!`, id)
                     }
+                    break
+                    case 'welcome':
+        if (!isGroupMsg) return await aruga.reply(from, ind.groupOnly(), id)
+        if (!isGroupAdmins) return await aruga.reply(from, ind.adminOnly(), id)
+        if (ar[0] === 'enable') {
+            if (isWelcomeOn) return await aruga.reply(from, ind.welcomeOnAlready(), id)
+            _welcome.push(chat.id)
+            fs.writeFileSync('./database/welcome.json', JSON.stringify(_welcome))
+            await aruga.reply(from, ind.welcomeOn(), id)
+        } else if (ar[0] === 'disable') {
+            _welcome.splice(chat.id, 1)
+            fs.writeFileSync('./database/welcome.json', JSON.stringify(_welcome))
+            await aruga.reply(from, ind.welcomeOff(), id)
+        } else {
+            await aruga.reply(from, ind.wrongFormat(), id)
+        }
                     break  
                     case 'tag':
                     if (!isGroupMsg) return aruga.reply(from, 'este comando só pode ser usado dentro do grupo', id)
